@@ -1,4 +1,4 @@
-const { Wallet } = require('../wallet/index');
+const { Wallet } = require('../wallet/wallet');
 const { verifySign } = require('../util/elliptic');
 describe('Wallet', () => {
 	let wallet;

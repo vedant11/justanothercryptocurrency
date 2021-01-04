@@ -1,6 +1,5 @@
 const { STARTING_BALANCE } = require('../config');
-const { ec } = require('../util/elliptic');
-const cryptoHash = require('../blockchain_logic/crypto-hash');
+const { ec, cryptoHash } = require('../util/elliptic');
 class Wallet {
 	constructor() {
 		this.balance = STARTING_BALANCE;
