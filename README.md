@@ -1,6 +1,6 @@
 # justanothercryptocurrency
 
-`no diff yet`
+-   keys generated using [`elliptic`](https://github.com/indutny/elliptic)
 
 README of this repo ends here unless you're more curious to stalk or you're lost
 
