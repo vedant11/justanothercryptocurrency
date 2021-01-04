@@ -13,4 +13,4 @@ class Wallet {
 	}
 }
 
-module.exports = Wallet;
+module.exports = { Wallet };
