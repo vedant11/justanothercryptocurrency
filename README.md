@@ -4,7 +4,7 @@
 
 -   testing framework: [`jest`](https://www.npmjs.com/package/jest)
 
--   check API collection at [`Postman collection`](https://www.getpostman.com/collections/762639b43411e76d2e67)
+-   import API collection from [`Postman collection`](https://www.getpostman.com/collections/762639b43411e76d2e67)
 
 README of this repo ends here unless you're more curious to stalk or you're lost
 

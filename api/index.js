@@ -18,7 +18,6 @@ app.use(bodyParser.json());
 app.get('/api/blocks', (req, res) => {
 	res.json(blockchain);
 });
-
 app.post('/api/mine', (req, res) => {
 	const { data } = req.body;
 	blockchain.addBlock({ data });
@@ -27,13 +26,19 @@ app.post('/api/mine', (req, res) => {
 	console.log('broadcasted the chain');
 	res.redirect('/api/blocks');
 });
-
 app.post('/api/transact', (req, res) => {
 	const { amount, recipient } = req.body;
 	const transaction = wallet.createTransaction({ amount, recipient });
 	transactionPool.addTransaction(transaction);
-	console.log('transaction made and added to pool', transactionPool);
 	res.json({ transaction });
+});
+app.get('/api/transaction-details', (req, res) => {
+	const { transactionId } = req.body;
+	console.log(
+		'transaction made and added to pool',
+		transactionPool.transactionsMap[transactionId].outputMap
+	);
+	res.json({ success: 'true' });
 });
 
 const syncChains = () => {
