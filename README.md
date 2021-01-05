@@ -2,19 +2,21 @@
 
 -   keys generated using [`elliptic`](https://github.com/indutny/elliptic)
 
+-   testing framework: [`jest`](https://www.npmjs.com/package/jest)
+
 README of this repo ends here unless you're more curious to stalk or you're lost
 
 ---
 
 ## Based on : `justanotherblockchain`
 
-to run tests
-
-> npm run test
-
 to install dep.
 
 > npm install
+
+to run tests
+
+> npm run test
 
 to start api server
 
