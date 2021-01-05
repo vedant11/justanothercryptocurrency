@@ -12,7 +12,6 @@ describe('Transaction()', () => {
 			amount,
 		});
 	});
-
 	it('has an id', () => {
 		expect(transaction).toHaveProperty('id');
 	});
@@ -77,6 +76,41 @@ describe('Transaction()', () => {
 					);
 				});
 			});
+		});
+	});
+	describe('updateTransaction()', () => {
+		let originalSign, originalSenderOutput, nextRecipient, nextAmount;
+		beforeEach(() => {
+			originalSign = transaction.input.signature;
+			originalSenderOutput =
+				transaction.outputMap[senderWallet.publicKey];
+			nextRecipient = 'new-recipient';
+			nextAmount = 50;
+
+			transaction.update({
+				senderWallet,
+				recipient: nextRecipient,
+				amount: nextAmount,
+			});
+		});
+		it('outputs amount to next recipient ', () => {
+			expect(transaction.outputMap[nextRecipient]).toEqual(nextAmount);
+		});
+		it('subtracts ampount from original sender ', () => {
+			expect(transaction.outputMap[senderWallet.publicKey]).toEqual(
+				originalSenderOutput - nextAmount
+			);
+		});
+		it('updates the transaction sign ', () => {
+			expect(transaction.input.signature).not.toEqual(originalSign);
+		});
+		it('should update total output', () => {
+			// output map total matches input
+			expect(
+				Object.values(transaction.outputMap).reduce(
+					(total, oneAmount) => total + oneAmount
+				)
+			).toEqual(transaction.input.amount);
 		});
 	});
 });
