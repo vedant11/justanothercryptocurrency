@@ -11,6 +11,9 @@ class TransactionPool {
 			(transaction) => transaction.input.address === inputAddress
 		);
 	}
+	setMap({ transactionsMap }) {
+		this.transactionsMap = transactionsMap;
+	}
 }
 
 module.exports = { TransactionPool };
