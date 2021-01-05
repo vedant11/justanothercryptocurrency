@@ -9,8 +9,8 @@ const { Wallet } = require('../wallet/wallet');
 
 const app = express();
 const blockchain = new Blockchain();
-const pubsub = new PubSub({ blockchain });
 const transactionPool = new TransactionPool();
+const pubsub = new PubSub({ blockchain, transactionPool });
 const wallet = new Wallet();
 const ROOT_NODE_ADDRESS = `http://localhost:${PORT}`;
 app.use(bodyParser.json());
@@ -24,7 +24,7 @@ app.post('/api/mine', (req, res) => {
 	// to broadcast change in chain to every peer
 	pubsub.broadcastBlockchain();
 	console.log('broadcasted the chain');
-	res.redirect('/api/blocks');
+	return res.redirect('/api/blocks');
 });
 app.post('/api/transact', (req, res) => {
 	const { amount, recipient } = req.body;
@@ -45,10 +45,11 @@ app.post('/api/transact', (req, res) => {
 		return res.status(400).json({ type: 'error', message: error.message });
 	}
 	transactionPool.addTransaction(transaction);
-	res.json({ transaction });
+	pubsub.broadcastTransaction(transaction);
+	return res.json({ transaction });
 });
 app.get('/api/transactionPool-details', (req, res) => {
-	res.json({ transactionPool });
+	return res.json({ transactionPool });
 });
 
 const syncChains = () => {
