@@ -47,13 +47,8 @@ app.post('/api/transact', (req, res) => {
 	transactionPool.addTransaction(transaction);
 	res.json({ transaction });
 });
-app.get('/api/transaction-details', (req, res) => {
-	const { transactionId } = req.body;
-	console.log(
-		'transaction made and added to pool',
-		transactionPool.transactionsMap[transactionId].outputMap
-	);
-	res.json({ success: 'true' });
+app.get('/api/transactionPool-details', (req, res) => {
+	res.json({ transactionPool });
 });
 
 const syncChains = () => {
