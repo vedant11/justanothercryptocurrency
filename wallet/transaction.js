@@ -24,13 +24,14 @@ class Transaction {
 		return input;
 	}
 	update({ senderWallet, recipient, amount }) {
+		if (amount > this.outputMap[senderWallet.publicKey])
+			throw 'Amount exceeds balance';
 		this.outputMap[recipient] = amount;
 		this.outputMap[senderWallet] -= amount;
 		this.input = this.createInput({
 			senderWallet,
 			outputMap: this.outputMap,
 		});
-		// this.input['signature'] = senderWallet.sign({ data: this.outputMap });
 	}
 	static validTransaction({ transaction }) {
 		const {
