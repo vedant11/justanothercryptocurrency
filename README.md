@@ -6,6 +6,14 @@
 
 -   import API collection from [`Postman collection`](https://www.getpostman.com/collections/762639b43411e76d2e67)
 
+### Features
+
+-   Records and assists `Transactions`
+
+-   Maintains client `Wallet`
+
+-   Sync `TransactionPool` instances and `Blockchain` instances across all peers
+
 README of this repo ends here unless you're more curious to stalk or you're lost
 
 ---
@@ -24,12 +32,20 @@ to start api server
 
 > npm run dev
 
+to start peer api server
+
+> npm run dev-peer
+
 ### Requirements
 
 For development, you will only need Node.js.
 
-#### Node
-
+<details>
+    <summary>
+    Node
+    </summary>
+    <br>
+    
 -   #### Node installation on Windows
 
     Just go on [official Node.js website](https://nodejs.org/) and download the installer.
@@ -70,3 +86,5 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 -   blockchain logic config [`./blockchain_logic/config.js`](https://github.com/vedant11/justanotherblockchain/blob/master/blockchain_logic/config.js)
 
 -   api constants config [`./api/api_config.js`](https://github.com/vedant11/justanotherblockchain/blob/master/api/api_config.js)
+
+</details>
