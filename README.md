@@ -18,7 +18,7 @@ README of this repo ends here unless you're more curious to stalk or you're lost
 
 ---
 
-## Based on : `justanotherblockchain`
+## Based on : [`justanotherblockchain`](https://github.com/vedant11/justanotherblockchain)
 
 to install dep.
 

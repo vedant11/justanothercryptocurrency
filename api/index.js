@@ -51,6 +51,10 @@ app.post('/api/transact', (req, res) => {
 app.get('/api/transactionPool-details', (req, res) => {
 	return res.json({ transactionPool });
 });
+app.get('/api/transactionPool/validTransactions', (req, res) => {
+	const validTransactions = transactionPool.fetchValidTransactions();
+	return res.json(validTransactions);
+});
 
 const syncWithRoot = () => {
 	request({ url: `${ROOT_NODE_ADDRESS}/api/blocks` }, (err, res, body) => {
