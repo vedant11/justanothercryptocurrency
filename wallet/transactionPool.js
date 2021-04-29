@@ -21,6 +21,7 @@ class TransactionPool {
 		return Object.values(this.transactionsMap).filter((transaction) =>
 			Transaction.validTransaction(transaction)
 		);
+		// can make a test for it
 	}
 }
 
