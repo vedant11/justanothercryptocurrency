@@ -1,6 +1,7 @@
 const { TransactionPool } = require('../wallet/transactionPool');
 const { Transaction } = require('../wallet/transaction');
 const { Wallet } = require('../wallet/wallet');
+const Blockchain = require('../blockchain_logic/blockchain');
 describe('TransactionPool', () => {
 	let transactionPool, transaction, senderWallet;
 	beforeEach(() => {
@@ -12,7 +13,7 @@ describe('TransactionPool', () => {
 			amount: 50,
 		});
 	});
-	describe('set transaction', () => {
+	describe('.addTransaction()', () => {
 		it('should add transaction to the transactionpool object', () => {
 			transactionPool.addTransaction(transaction);
 			expect(transactionPool.transactionsMap[transaction.id]).toBe(
@@ -20,7 +21,7 @@ describe('TransactionPool', () => {
 			);
 		});
 	});
-	describe('existingTransaction()', () => {
+	describe('.existingTransaction()', () => {
 		it('should return an existing transaction if present', () => {
 			transactionPool.addTransaction(transaction);
 			expect(
@@ -30,7 +31,7 @@ describe('TransactionPool', () => {
 			).toBe(transaction);
 		});
 	});
-	describe('fetchvalidTransactions()', () => {
+	describe('.fetchvalidTransactions()', () => {
 		let validTransactions;
 		beforeEach(() => {
 			validTransactions = [];
@@ -59,6 +60,32 @@ describe('TransactionPool', () => {
 		it('should return valid transactions', () => {
 			expect(transactionPool.fetchValidTransactions()).toEqual(
 				validTransactions
+			);
+		});
+	});
+	describe('.clear()', () => {
+		it('should clear the transactionPool.transactionsMap', () => {
+			transactionPool.clear();
+			expect(transactionPool.transactionsMap).toEqual({});
+		});
+	});
+	describe('.clearBlockchainTransactions()', () => {
+		it('should only clear the transactions in\
+		transactionPool.transactionMap if the transaction is included in the Blockchain', () => {
+			const blockchain = new Blockchain();
+			const expectedTransactionsMap = {};
+			Object.values(transactionPool.transactionsMap).map(
+				(transaction, index) => {
+					if (index % 2 === 0)
+						transactionPool.addTransaction({ transaction });
+					else expectedTransactionsMap[transaction.id] = transaction;
+				}
+			);
+			transactionPool.clearBlockchainTransactions({
+				chain: blockchain.chain,
+			});
+			expect(transactionPool.transactionsMap).toEqual(
+				expectedTransactionsMap
 			);
 		});
 	});

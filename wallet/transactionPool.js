@@ -16,11 +16,25 @@ class TransactionPool {
 	setMap({ transactionsMap }) {
 		this.transactionsMap = transactionsMap;
 	}
-
 	fetchValidTransactions() {
 		return Object.values(this.transactionsMap).filter((transaction) =>
 			Transaction.validTransaction({ transaction })
 		);
+	}
+	clear() {
+		// sets transactionMap to empty dictionary;
+		// clears the transactionMap irrespective
+		// of whether the transactions have been included in the Blockchain
+		this.setMap({ transactionsMap: {} });
+	}
+	clearBlockchainTransactions({ chain }) {
+		chain.forEach((block, index) => {
+			if (index === 0) return;
+			block.data.forEach((transaction) => {
+				if (this.transactionsMap[transaction.id])
+					delete this.transactionsMap[transaction.id];
+			});
+		});
 	}
 }
 
