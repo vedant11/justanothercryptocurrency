@@ -30,4 +30,36 @@ describe('TransactionPool', () => {
 			).toBe(transaction);
 		});
 	});
+	describe('fetchvalidTransactions()', () => {
+		let validTransactions;
+		beforeEach(() => {
+			validTransactions = [];
+			for (let i = 0; i < 10; i++) {
+				transaction = new Transaction({
+					senderWallet,
+					recipient: 'random-recipient',
+					amount: 10,
+				});
+
+				if ((i == 1) | (i == 4) | (i == 7)) {
+					// invalid input amount
+					transaction.input.amount = 100000;
+				} else if ((i == 2) | (i == 5)) {
+					// tampered signnature
+					transaction.input.signature = new Wallet().sign(
+						'random-sign'
+					);
+				} else {
+					// normal valid transactions are stored in a variable
+					validTransactions.push(transaction);
+				}
+				transactionPool.addTransaction(transaction);
+			}
+		});
+		it('should return valid transactions', () => {
+			expect(transactionPool.fetchValidTransactions()).toEqual(
+				validTransactions
+			);
+		});
+	});
 });
