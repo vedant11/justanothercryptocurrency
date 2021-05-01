@@ -28,6 +28,6 @@ jobs:
             - run: npm run build --if-present
             - run: npm run test
             - name: check if dev server runs
-              run: npm run dev &> logfile & process=$!; tail -F logfile | grep -m1 'app started' && kill $process && exit 0
+              run: npm run dev &> logfile & process=$!; tail -F logfile | grep -m1 'app started' && kill $process && echo 'ending task' && exit 1
             - name: check if dev-peer server runs
               run: npm run dev &> logfile & process=$!; tail -F logfile | grep -m1 'app started' && kill $process && exit 0
