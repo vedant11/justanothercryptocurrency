@@ -6,18 +6,26 @@ const bodyParser = require('body-parser');
 const PubSub = require('./pubsub');
 const { TransactionPool } = require('../wallet/transactionPool');
 const { Wallet } = require('../wallet/wallet');
+const { TransactionMiner } = require('../mining/transactionMiner');
 
 const app = express();
 const blockchain = new Blockchain();
 const transactionPool = new TransactionPool();
 const pubsub = new PubSub({ blockchain, transactionPool });
 const wallet = new Wallet();
+const transactionMiner = new TransactionMiner({
+	blockchain: blockchain,
+	wallet: wallet,
+	transactionPool: transactionPool,
+	pubsub: pubsub,
+});
 const ROOT_NODE_ADDRESS = `http://localhost:${PORT}`;
 app.use(bodyParser.json());
 
 app.get('/api/blocks', (req, res) => {
 	res.json(blockchain);
 });
+
 app.post('/api/mine', (req, res) => {
 	const { data } = req.body;
 	blockchain.addBlock({ data });
@@ -26,6 +34,13 @@ app.post('/api/mine', (req, res) => {
 	console.log('broadcasted the chain');
 	return res.redirect('/api/blocks');
 });
+
+app.get('/api/mine-transactions', (req, res) => {
+	transactionMiner.mineTransaction();
+
+	res.redirect('/api/blocks');
+});
+
 app.post('/api/transact', (req, res) => {
 	const { amount, recipient } = req.body;
 	let transaction = transactionPool.existingTransaction({
@@ -48,9 +63,11 @@ app.post('/api/transact', (req, res) => {
 	pubsub.broadcastTransaction(transaction);
 	return res.json({ transaction });
 });
+
 app.get('/api/transactionPool-details', (req, res) => {
 	return res.json({ transactionPool });
 });
+
 app.get('/api/transactionPool/validTransactions', (req, res) => {
 	const validTransactions = transactionPool.fetchValidTransactions();
 	return res.json(validTransactions);
@@ -81,6 +98,7 @@ let PEER_PORT;
 if (process.env.GENERATE_PEER_PORT === 'true')
 	PEER_PORT = PORT + Math.ceil(Math.random() * 1000);
 if (PEER_PORT === undefined) PEER_PORT = PORT;
+
 app.listen(PEER_PORT, () => {
 	console.log(`app started at ${PEER_PORT} `);
 	// syncing on start only for non root nodes
