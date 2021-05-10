@@ -17,7 +17,7 @@ class Blockchain {
 		this.chain.push(newBlock);
 	}
 
-	replaceChain(newChain) {
+	replaceChain(newChain, callback) {
 		if (this.chain.length >= newChain.chain.length) {
 			console.error(`length isn't valid for replacement `);
 			return;
@@ -26,8 +26,9 @@ class Blockchain {
 			console.error(`new chain is invalid`);
 			return;
 		}
-		console.log('replacing chain');
-		this.chain = newChain;
+		console.log('calling callback and replacing chain');
+		if (callback) callback();
+		this.chain = newChain['chain'];
 		return;
 	}
 

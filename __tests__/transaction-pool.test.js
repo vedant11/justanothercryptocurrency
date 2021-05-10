@@ -82,7 +82,7 @@ describe('TransactionPool', () => {
 				}
 			);
 			transactionPool.clearBlockchainTransactions({
-				chain: blockchain.chain,
+				blockchain: blockchain,
 			});
 			expect(transactionPool.transactionsMap).toEqual(
 				expectedTransactionsMap

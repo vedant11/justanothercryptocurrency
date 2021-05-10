@@ -15,20 +15,30 @@ class PubSub {
 
 		this.subscribeAll();
 
-		this.sub.on('message', (channel, message) =>
-			this.handleMessage(channel, message)
-		);
+		this.sub.on('message', (channel, message) => {
+			this.handleMessage(channel, message);
+		});
 	}
 
 	handleMessage(channel, message) {
+		// parsedMessage is a blockchain Object
 		const parsedMessage = JSON.parse(message);
-		console.log('received a message', parsedMessage);
 		switch (channel) {
 			case CHANNELS.BLOCKCHAIN: {
-				this.blockchain.replaceChain(parsedMessage);
+				// callback function to clearBlockchainTransactions
+				// after local blockchain is updated after `mine-transactions`
+				this.blockchain.replaceChain(parsedMessage, () => {
+					this.transactionPool.clearBlockchainTransactions({
+						// this argument will be an array of latest blocks to let the
+						// method know which transactions to delete from the local TransactionPool
+						blockchain: parsedMessage,
+					});
+				});
+				break;
 			}
 			case CHANNELS.TRANSACTION: {
 				this.transactionPool.addTransaction(parsedMessage);
+				break;
 			}
 			default:
 				break;
@@ -57,6 +67,7 @@ class PubSub {
 		});
 	}
 	broadcastTransaction(transaction) {
+		console.log('you shouldnt have called me');
 		this.publish({
 			channel: CHANNELS.TRANSACTION,
 			message: JSON.stringify(transaction),

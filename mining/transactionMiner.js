@@ -29,3 +29,5 @@ class TransactionMiner {
 		this.transactionPool.clear();
 	}
 }
+
+module.exports = { TransactionMiner };

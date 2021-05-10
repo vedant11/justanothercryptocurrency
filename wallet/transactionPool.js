@@ -28,12 +28,14 @@ class TransactionPool {
 		// of whether the transactions have been included in the Blockchain
 		this.setMap({ transactionsMap: {} });
 	}
-	clearBlockchainTransactions({ chain }) {
+	clearBlockchainTransactions({ blockchain }) {
+		const chain = blockchain['chain']; // chain array of the blockchain
 		chain.forEach((block, index) => {
-			if (index === 0) return;
+			if (block.hash === 'hash1') return; // skip the genesis block
 			block.data.forEach((transaction) => {
-				if (this.transactionsMap[transaction.id])
+				if (this.transactionsMap[transaction.id]) {
 					delete this.transactionsMap[transaction.id];
+				}
 			});
 		});
 	}
