@@ -17,6 +17,7 @@ class TransactionPool {
 		this.transactionsMap = transactionsMap;
 	}
 	fetchValidTransactions() {
+		// returns an array of transactions
 		return Object.values(this.transactionsMap).filter((transaction) =>
 			Transaction.validTransaction({ transaction })
 		);

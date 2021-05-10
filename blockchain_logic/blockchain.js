@@ -9,6 +9,7 @@ class Blockchain {
 		this.chain.push(genesisBlock);
 	}
 	addBlock({ data }) {
+		// data is an array of transactions for crypto implementation on blockchain
 		const newBlock = Block.mineBlock({
 			lastBlock: this.chain[this.chain.length - 1],
 			data,
