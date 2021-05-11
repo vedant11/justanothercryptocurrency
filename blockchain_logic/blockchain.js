@@ -90,6 +90,7 @@ class Blockchain {
 						return false;
 
 					if (transactionSet.has(transaction)) return false;
+					else transactionSet.add(transaction);
 				}
 			}
 		}
