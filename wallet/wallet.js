@@ -21,6 +21,32 @@ class Wallet {
 		});
 		return transaction;
 	}
+	static calculateBalance({ chain, address }) {
+		let recipientTotal = 0,
+			newBalance = 0;
+		let senderTransaction = false;
+
+		chain.forEach((block) => {
+			if (block.data === 'data') return;
+
+			block.data.forEach((transaction) => {
+				const recipientAmount = transaction.outputMap[address];
+
+				// if a user is a sender, there is only one transaction corresponding
+				// to it and becomes the newBalance
+				// furthermore,
+				// if a user is a recipient, the amounts add up to his balance
+				if (recipientAmount) recipientTotal += recipientAmount;
+				if (transaction.input['address'] === address) {
+					newBalance = recipientAmount;
+					recipientTotal = 0;
+					senderTransaction = true;
+				}
+			});
+		});
+		if (senderTransaction) return newBalance + recipientTotal;
+		return STARTING_BALANCE + recipientTotal;
+	}
 }
 
 module.exports = { Wallet };

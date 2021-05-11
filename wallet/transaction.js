@@ -1,13 +1,17 @@
 const { v4: uuidv4 } = require('uuid');
 const { verifySign } = require('../util/elliptic');
+const { MINING_REWARD, REWARD_INPUT } = require('../config');
 class Transaction {
-	constructor({ senderWallet, recipient, amount }) {
+	constructor({ senderWallet, recipient, amount, outputMap, input }) {
 		this.id = uuidv4();
-		this.outputMap = this.initiateOM({ senderWallet, recipient, amount });
-		this.input = this.createInput({
-			senderWallet,
-			outputMap: this.outputMap,
-		});
+		this.outputMap =
+			outputMap || this.initiateOM({ senderWallet, recipient, amount });
+		this.input =
+			input ||
+			this.createInput({
+				senderWallet,
+				outputMap: this.outputMap,
+			});
 	}
 	initiateOM({ senderWallet, recipient, amount }) {
 		const outputMap = {};
@@ -52,6 +56,15 @@ class Transaction {
 		)
 			return false;
 		return true;
+	}
+	static rewardTransaction({ minerWallet }) {
+		// we want hardcoded outputMap and inputs
+		return new Transaction({
+			input: REWARD_INPUT,
+			outputMap: {
+				[minerWallet.publicKey]: MINING_REWARD,
+			},
+		});
 	}
 }
 
