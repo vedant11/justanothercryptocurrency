@@ -83,6 +83,17 @@ app.get('/api/transactionPool/validTransactions', (req, res) => {
 	return res.json(validTransactions);
 });
 
+app.get('/api/wallet-info', (req, res) => {
+	const senderPublicKey = wallet.publicKey;
+	res.json({
+		address: senderPublicKey,
+		balance: Wallet.calculateBalance({
+			chain: blockchain.chain,
+			address: senderPublicKey,
+		}),
+	});
+});
+
 const syncWithRoot = () => {
 	request({ url: `${ROOT_NODE_ADDRESS}/api/blocks` }, (err, res, body) => {
 		if (!err && res.statusCode === 200) {
@@ -95,8 +106,8 @@ const syncWithRoot = () => {
 		{ url: `${ROOT_NODE_ADDRESS}/api/transactionPool-details` },
 		(err, res, body) => {
 			if (!err && res.statusCode === 200) {
-				const transactionsMap = JSON.parse(body).transactionPool
-					.transactionsMap;
+				const transactionsMap =
+					JSON.parse(body).transactionPool.transactionsMap;
 				transactionPool.setMap({ transactionsMap });
 			}
 		}
