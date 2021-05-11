@@ -29,6 +29,9 @@ class Blockchain {
 			console.error(`new chain is invalid`);
 			return;
 		}
+
+		if (!this.validTransactionData({ chain: newChain })) return;
+
 		console.log('calling callback and replacing chain');
 		if (callback) callback();
 		this.chain = newChain['chain'];
