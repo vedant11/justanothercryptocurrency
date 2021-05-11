@@ -1,9 +1,11 @@
 const Blockchain = require('../blockchain_logic/blockchain');
 const Block = require('../blockchain_logic/block');
+const { Wallet } = require('../wallet/wallet');
+const { Transaction } = require('../wallet/transaction');
 
 describe('Blockchain', () => {
 	let newBlockchain, secondBC, originalChain;
-	//quieting console for this file
+	// quieting console for this file
 	let errorMock, logMock;
 	errorMock = jest.fn();
 	logMock = jest.fn();
@@ -113,6 +115,119 @@ describe('Blockchain', () => {
 				it('should log replacement', () => {
 					expect(logMock).toHaveBeenCalled();
 				});
+			});
+		});
+	});
+	describe('validTransactionData()', () => {
+		let wallet, transaction, mineReward;
+
+		beforeEach(() => {
+			wallet = new Wallet();
+			transaction = wallet.createTransaction({
+				recipient: 'random-recipient-pubkey',
+				amount: 50,
+			});
+			mineReward = Transaction.rewardTransaction({
+				minerWallet: wallet,
+			});
+		});
+
+		describe('transaction data is valid', () => {
+			it('should return true', () => {
+				secondBC.addBlock({
+					data: [transaction, mineReward],
+				});
+
+				// relying on newBlockchain's history
+				expect(
+					newBlockchain.validTransactionData({
+						chain: secondBC.chain,
+					})
+				).toBe(true);
+			});
+		});
+
+		// invalid cases
+		describe('the transaction data has multiple rewards', () => {
+			it('returns false', () => {
+				secondBC.addBlock({
+					data: [transaction, mineReward, mineReward],
+				});
+				// relying on newBlockchain's history
+				expect(
+					newBlockchain.validTransactionData({
+						chain: secondBC.chain,
+					})
+				).toBe(false);
+			});
+		});
+
+		describe('the transaction data has at least one changed outputMap', () => {
+			describe('the transaction is not a reward transaction', () => {
+				it('should return false', () => {
+					transaction.outputMap[wallet.publicKey] = 1234;
+					secondBC.addBlock({
+						data: [transaction, mineReward],
+					});
+					expect(
+						newBlockchain.validTransactionData({
+							chain: secondBC.chain,
+						})
+					).toBe(false);
+				});
+			});
+			describe('the transaction is a reward transaction', () => {
+				it('should return false', () => {
+					mineReward.outputMap[wallet.publicKey] = 1234;
+					secondBC.addBlock({ data: [transaction, mineReward] });
+					expect(
+						newBlockchain.validTransactionData({
+							chain: secondBC.chain,
+						})
+					).toBe(false);
+				});
+			});
+		});
+
+		describe('the transaction data has changed input', () => {
+			it('should return false', () => {
+				wallet.balance = 2000;
+				const tamperedOutputMap = {
+					[wallet.publicKey]: 1900,
+					randomRecipient: 100,
+				};
+				const tamperedTransaction = {
+					input: {
+						timestamp: Date.now(),
+						amount: wallet.balance,
+						address: wallet.publicKey,
+						signature: wallet.sign({ data: tamperedOutputMap }),
+					},
+					outputMap: tamperedOutputMap,
+				};
+
+				secondBC.addBlock({
+					data: [tamperedTransaction, mineReward],
+				});
+				expect(
+					newBlockchain.validTransactionData({
+						chain: secondBC.chain,
+					})
+				).toBe(false);
+			});
+		});
+
+		describe('a block has multiple identical transactions', () => {
+			it('should return false', () => {
+				mineReward.outputMap[wallet.publicKey] = 1234;
+				secondBC.addBlock({
+					data: [transaction, transaction, mineReward],
+				});
+				expect(
+					newBlockchain.validTransactionData({
+						chain: secondBC.chain,
+					})
+				).toBe(false);
 			});
 		});
 	});

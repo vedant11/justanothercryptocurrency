@@ -1,3 +1,6 @@
+const { REWARD_INPUT, MINING_REWARD } = require('../config');
+const { Transaction } = require('../wallet/transaction');
+const { Wallet } = require('../wallet/wallet');
 const Block = require('./block');
 
 class Blockchain {
@@ -49,6 +52,46 @@ class Blockchain {
 			// to prevent large jumps in difficulty levels
 			if (Math.abs(block.difficulty - lastDifficulty) > 1) return false;
 			lastDifficulty = block.difficulty;
+		}
+		return true;
+	}
+	validTransactionData({ chain }) {
+		for (let index = 1; index < chain.length; index++) {
+			const block = chain[index];
+			let mineRewardsCount = 0;
+			const transactionSet = new Set();
+			for (let j = 0; j < block.data.length; j++) {
+				const transaction = block.data[j];
+
+				if (transaction.input.address === REWARD_INPUT.address) {
+					// invalid if present more than once
+					if (mineRewardsCount) return false;
+					mineRewardsCount += 1;
+
+					// to see if `MINING_REWARD` is tampered
+					if (
+						Object.values(transaction.outputMap)[0] !==
+						MINING_REWARD
+					)
+						return false;
+				} else {
+					if (
+						!Transaction.validTransaction({
+							transaction: transaction,
+						})
+					)
+						return false;
+					const actualBalance = Wallet.calculateBalance({
+						chain: this.chain,
+						address: transaction.input.address,
+					});
+
+					if (transaction.input.amount !== actualBalance)
+						return false;
+
+					if (transactionSet.has(transaction)) return false;
+				}
+			}
 		}
 		return true;
 	}
