@@ -1,4 +1,10 @@
+// react
 import React, { useEffect, useState } from 'react';
+
+// components
+import Block from './Block.js';
+
+// constants
 import { BLOCKS_API } from '../../config';
 
 function Blocks() {
@@ -10,16 +16,12 @@ function Blocks() {
 			.then((res) => setBlocks(res['chain']));
 	}, []);
 	const Blocks = blocks.map((block) => {
-		return (
-			<div key={block.hash} className='border m-2 p-4'>
-				{block.hash}
-			</div>
-		);
+		return <Block key={block.hash} block={block} />;
 	});
 	return (
 		<div className='row justify-content-center m-4 p-3'>
 			<div className='col-md-auto border'>
-				<h2>Blocks</h2>
+				<h2 className='m-2 pb-4 pt-4'>Blocks</h2>
 				{blocks ? Blocks : null}
 			</div>
 		</div>
