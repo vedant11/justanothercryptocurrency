@@ -1,10 +1,14 @@
 # justanothercryptocurrency
 
+## Backend
+
 -   keys generated using [`elliptic`](https://github.com/indutny/elliptic)
 
 -   testing framework: [`jest`](https://www.npmjs.com/package/jest)
 
 -   import API collection from [`Postman collection`](https://www.getpostman.com/collections/762639b43411e76d2e67)
+
+-   serves static and bundling/build by `parcel-bundler`
 
 ### Features
 
@@ -14,7 +18,19 @@
 
 -   Sync `TransactionPool` instances and `Blockchain` instances across all peers
 
-README of this repo ends here unless you're more curious to stalk or you're lost
+-   Mine blocks and add pooled transaction to the current blockchain
+
+-   Validate blockchain instances
+
+## Frontend
+
+### React
+
+- Bootstrap: `react-bootstrap`
+- Icons: `react-icons`
+- Toasts: `react-toastify`
+
+README of this repo ends here
 
 ---
 
