@@ -4,7 +4,7 @@ class TransactionPool {
 	constructor() {
 		this.transactionsMap = {};
 	}
-	addTransaction(transaction) {
+	addTransaction({ transaction }) {
 		this.transactionsMap[transaction.id] = transaction;
 	}
 	existingTransaction({ inputAddress }) {

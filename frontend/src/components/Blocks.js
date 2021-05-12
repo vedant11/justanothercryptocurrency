@@ -10,13 +10,19 @@ function Blocks() {
 			.then((res) => setBlocks(res['chain']));
 	}, []);
 	const Blocks = blocks.map((block) => {
-		return <div key={block.hash}>{block.hash}</div>;
+		return (
+			<div key={block.hash} className='border m-2 p-4'>
+				{block.hash}
+			</div>
+		);
 	});
 	return (
-		<>
-			<h2>Blocks</h2>
-			{blocks ? Blocks : null}
-		</>
+		<div className='row justify-content-center m-4 p-3'>
+			<div className='col-md-auto border'>
+				<h2>Blocks</h2>
+				{blocks ? Blocks : null}
+			</div>
+		</div>
 	);
 }
 

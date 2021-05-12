@@ -15,7 +15,7 @@ describe('TransactionPool', () => {
 	});
 	describe('.addTransaction()', () => {
 		it('should add transaction to the transactionpool object', () => {
-			transactionPool.addTransaction(transaction);
+			transactionPool.addTransaction({ transaction: transaction });
 			expect(transactionPool.transactionsMap[transaction.id]).toBe(
 				transaction
 			);
@@ -23,7 +23,7 @@ describe('TransactionPool', () => {
 	});
 	describe('.existingTransaction()', () => {
 		it('should return an existing transaction if present', () => {
-			transactionPool.addTransaction(transaction);
+			transactionPool.addTransaction({ transaction: transaction });
 			expect(
 				transactionPool.existingTransaction({
 					inputAddress: senderWallet.publicKey,
@@ -54,7 +54,7 @@ describe('TransactionPool', () => {
 					// normal valid transactions are stored in a variable
 					validTransactions.push(transaction);
 				}
-				transactionPool.addTransaction(transaction);
+				transactionPool.addTransaction({ transaction: transaction });
 			}
 		});
 		it('should return valid transactions', () => {

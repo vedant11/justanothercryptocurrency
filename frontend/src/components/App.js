@@ -6,16 +6,17 @@ import Blocks from './Blocks.js';
 
 // styling
 import 'react-toastify/dist/ReactToastify.css';
+import '../static/css/App.css';
 
 // init
 toast.configure();
 
 function App() {
 	return (
-		<>
+		<div className='container'>
 			<WalletInfo />
 			<Blocks />
-		</>
+		</div>
 	);
 }
 

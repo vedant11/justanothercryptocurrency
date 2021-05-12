@@ -1,6 +1,5 @@
 const express = require('express');
 const request = require('request');
-const bodyParser = require('body-parser');
 const { PORT } = require('./api_config');
 var path = require('path');
 const Blockchain = require('../blockchain_logic/blockchain');
@@ -20,6 +19,47 @@ const transactionMiner = new TransactionMiner({
 	transactionPool: transactionPool,
 	pubsub: pubsub,
 });
+
+// populating blockchain for testing
+const chicWallet = new Wallet();
+const counterChicWallet = new Wallet();
+
+const walletTransaction = ({ wlt, recipient, amount }) => {
+	const transaction = wlt.createTransaction({
+		recipient: recipient,
+		amount: amount,
+	});
+	transactionPool.addTransaction({
+		transaction: transaction,
+	});
+};
+
+const chicAction = () =>
+	walletTransaction({
+		wlt: wallet,
+		recipient: counterChicWallet.publicKey,
+		amount: 5,
+	});
+const counterChicAction = () =>
+	walletTransaction({
+		wlt: counterChicWallet,
+		recipient: chicWallet.publicKey,
+		amount: 5,
+	});
+
+for (let i = 0; i < 10; i++) {
+	if (i % 3 === 0) {
+		chicAction();
+		chicAction();
+	} else {
+		counterChicAction();
+		counterChicAction();
+	}
+	console.log(
+		Object.values(transactionPool['transactionsMap'])[0]['transaction']
+	);
+	transactionMiner.mineTransaction();
+}
 
 const ROOT_NODE_ADDRESS = `http://localhost:${PORT}`;
 let PEER_PORT;

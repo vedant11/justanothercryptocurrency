@@ -54,15 +54,15 @@ class Block {
 	// returns suitable difficulty level
 	static adjustDifficulty({ originalBlock, timestamp }) {
 		if (originalBlock.difficulty < 1) {
-			console.log('difficulty was negative');
+			// console.log('difficulty was negative');
 			return 1;
 		}
 		const diff = timestamp - Number(originalBlock.timestamp);
 		if (diff > MINE_RATE && originalBlock.difficulty > 1) {
-			console.log('decreasing difficulty');
+			// console.log('decreasing difficulty');
 			return originalBlock.difficulty - 1;
 		}
-		console.log('increasing difficulty');
+		// console.log('increasing difficulty');
 		return originalBlock.difficulty + 1;
 	}
 }

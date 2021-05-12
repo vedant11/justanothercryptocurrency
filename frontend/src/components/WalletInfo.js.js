@@ -73,15 +73,17 @@ function WalletInfo() {
 	}, []);
 	const { address, balance } = walletInfo;
 	return (
-		<>
-			<h2>WalletInfo</h2>
+		<div className='row justify-content-center m-4 b-1 p-3'>
+			<div className='col-md-auto border'>
+				<h2>WalletInfo</h2>
 
-			<div>
-				Address: {address.slice(0, 6)},
-				<AddressPopover />
+				<div>
+					Address: {address.slice(0, 6)},
+					<AddressPopover />
+				</div>
+				<div>Balance: {balance},</div>
 			</div>
-			<div>Balance: {balance},</div>
-		</>
+		</div>
 	);
 }
 

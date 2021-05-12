@@ -39,10 +39,10 @@ class Transaction {
 		});
 	}
 	static validTransaction({ transaction }) {
-		const {
-			input: { address, amount, signature },
-			outputMap,
-		} = transaction;
+		// console.log('transaction', transaction['outputMap']);
+		const { input, outputMap } = transaction;
+		// console.log('input', input);
+		const { address, amount, signature } = input;
 		const outputTotal = Object.values(outputMap).reduce(
 			(total, outputAmount) => total + outputAmount
 		);

@@ -1,5 +1,8 @@
+// react
 import React from 'react';
 import { render } from 'react-dom';
+
+// componenents
 import App from './components/App';
 
 render(
