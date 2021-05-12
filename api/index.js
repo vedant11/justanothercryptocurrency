@@ -1,8 +1,9 @@
 const express = require('express');
 const request = require('request');
-const Blockchain = require('../blockchain_logic/blockchain');
-const { PORT } = require('./api_config');
 const bodyParser = require('body-parser');
+const { PORT } = require('./api_config');
+var path = require('path');
+const Blockchain = require('../blockchain_logic/blockchain');
 const PubSub = require('./pubsub');
 const { TransactionPool } = require('../wallet/transactionPool');
 const { Wallet } = require('../wallet/wallet');
@@ -26,7 +27,8 @@ if (process.env.GENERATE_PEER_PORT === 'true')
 	PEER_PORT = PORT + Math.ceil(Math.random() * 1000);
 if (PEER_PORT === undefined) PEER_PORT = PORT;
 
-app.use(bodyParser.json());
+express.json();
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 app.get('/api/blocks', (req, res) => {
 	if (PEER_PORT === 3000) {
@@ -92,6 +94,10 @@ app.get('/api/wallet-info', (req, res) => {
 			address: senderPublicKey,
 		}),
 	});
+});
+
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 const syncWithRoot = () => {

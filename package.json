@@ -6,10 +6,13 @@
 	"scripts": {
 		"test": "jest ",
 		"test-watch": "jest --watchAll",
-		"start": "node ./api/index.js",
-		"dev": "npm run redis && nodemon ./api/index.js",
+		"start": "npm run build-frontend && node ./api/index.js",
+		"dev": "npm run dev-frontend & npm run redis && nodemon ./api/index.js",
 		"dev-peer": "cross-env GENERATE_PEER_PORT='true' nodemon ./api/index.js",
-		"redis": "redis-server --daemonize yes"
+		"dev-frontend": "npm run clean && parcel frontend/src/index.html --out-dir frontend/dist",
+		"redis": "redis-server --daemonize yes",
+		"build-frontend": "npm run clean && parcel build frontend/src/index.html --out-dir frontend/dist",
+		"clean": "rm -rf .cache frontend/dist"
 	},
 	"jest": {
 		"testEnvironment": "node"
@@ -26,6 +29,9 @@
 		"elliptic": "^6.5.3",
 		"express": "^4.17.1",
 		"hex-to-binary": "^1.0.1",
+		"parcel-bundler": "^1.12.5",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
 		"redis": "^3.0.2",
 		"request": "^2.88.2",
 		"uuid": "^8.3.2"
