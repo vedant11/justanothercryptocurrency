@@ -1,20 +1,35 @@
 // react
 import React from 'react';
-import CustomPopoverElement from './CustomPopoverElement';
+import { Button } from 'react-bootstrap';
+
+// components
+import Transaction from './Transaction';
+
 function Block({ block }) {
-	const stringifiedData = JSON.stringify(block.data, null, 2);
+	function displayTransaction() {
+		console.log('ran');
+		document.getElementById(
+			`${block.hash.substring(0, 20)}-all-transactions`
+		).style.display = 'block';
+	}
 
 	return (
 		<div className='border m-2 p-4 border-dark rounded'>
-			Hash: {block.hash}
+			Hash: {`${block.hash.substring(0, 20)}`}
 			<br />
 			Timestamp: {block.timestamp}
 			<br />
-			<CustomPopoverElement
-				title='Data'
-				data={stringifiedData}
-				type='block'
-			/>
+			Transaction:
+			<div
+				id={`${block.hash.substring(0, 20)}-all-transactions`}
+				style={{ display: 'none' }}>
+				{typeof block.data !== 'string'
+					? block.data.map((transactionData) => (
+							<Transaction transactionData={transactionData} />
+					  ))
+					: block.data}
+			</div>
+			<Button onClick={displayTransaction}>Show more</Button>
 			<br />
 		</div>
 	);
