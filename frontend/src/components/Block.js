@@ -5,7 +5,7 @@ function Block({ block }) {
 	const stringifiedData = JSON.stringify(block.data, null, 2);
 
 	return (
-		<div className='border m-2 p-4'>
+		<div className='border m-2 p-4 border-dark rounded'>
 			Hash: {block.hash}
 			<br />
 			Timestamp: {block.timestamp}

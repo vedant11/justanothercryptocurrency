@@ -22,7 +22,7 @@ function WalletInfo() {
 	const { address, balance } = walletInfo;
 	return (
 		<div className='row justify-content-center m-4 b-1 p-3'>
-			<div className='col-md-auto border'>
+			<div className='col-md-auto border border-dark rounded'>
 				<h2>WalletInfo</h2>
 
 				<div>
@@ -31,6 +31,7 @@ function WalletInfo() {
 						title='Address full hash'
 						data={address}
 						type='wallet-info'
+						className='ml-2 mb-2 pt-0'
 					/>
 				</div>
 				<div>Balance: {balance},</div>

@@ -20,7 +20,7 @@ function Blocks() {
 	});
 	return (
 		<div className='row justify-content-center m-4 p-3'>
-			<div className='col-md-auto border'>
+			<div className='col-md-auto border border-dark rounded'>
 				<h2 className='m-2 pb-4 pt-4'>Blocks</h2>
 				{blocks ? Blocks : null}
 			</div>

@@ -51,10 +51,7 @@ function CustomPopoverElement({ title, data, type }) {
 	}
 	const PopoverElement = () => (
 		<OverlayTrigger trigger='click' placement='right' overlay={popover()}>
-			<Button
-				className='ml-2 mb-2 pt-0'
-				variant='light outline-secondary'
-				size='sm'>
+			<Button className='' variant='light outline-secondary' size='sm'>
 				i
 			</Button>
 		</OverlayTrigger>
